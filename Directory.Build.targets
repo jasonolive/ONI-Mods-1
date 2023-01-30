@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <Target Name="SetPlatform" BeforeTargets="CoreCompile">
+    <PropertyGroup>
+      <PlatformTarget>AnyCPU</PlatformTarget>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="ClearGameFolderCopyLocal" AfterTargets="ResolveAssemblyReferences">
+    <ItemGroup>
+      <ReferenceCopyLocalPaths Remove="$(GameFolder)\*" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="WriteModInfoFile" BeforeTargets="PreBuildEvent" >
+    <PropertyGroup>
+      <ModInfoFile>$(IntermediateOutputPath)\mod_info.yaml</ModInfoFile>
+      <ModInfoFileContent>
+supportedContent: $(SupportedContent)
+minimumSupportedBuild: $(LastWorkingBuild)
+version: $(FileVersion)
+APIVersion: $(APIVersion)
+      </ModInfoFileContent>
+    </PropertyGroup>
+    <WriteLinesToFile File="$(ModInfoFile)" Overwrite="true" Lines="$(ModInfoFileContent)"/>
+  </Target>
+
+  <Target Name="WriteModDescriptionFile" BeforeTargets="PreBuildEvent" >
+    <PropertyGroup>
+      <ModDescriptionFile>$(IntermediateOutputPath)\mod.yaml</ModDescriptionFile>
+      <ModDescriptionFileContent>
+title: "$(AssemblyTitle)"
+description: "$(Description)"
+staticID: EnemyArea.$(AssemblyName)
+      </ModDescriptionFileContent>
+    </PropertyGroup>
+    <WriteLinesToFile File="$(ModDescriptionFile)" Overwrite="true" Lines="$(ModDescriptionFileContent)"/>
+  </Target>
+
+  <Target Name="CopyArtifactsToInstallFolder" AfterTargets="Build">
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <InstallFolder>..\Release\$(ProjectName)</InstallFolder>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <InstallFolder>$(ModFolder)\$(Product).$(MSBuildProjectName)</InstallFolder>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <AnimFiles Include="$(ProjectDir)\anim\**\*.*" />
+      <DLCFiles Include="$(ProjectDir)\dlc\**\*.*" />
+      <WorldGenTemplates Include="$(ProjectDir)\templates\**\*.*" />
+      <WorldGenFiles Include="$(ProjectDir)\worldgen\**\*.*" />
+      <ImageFiles Include="$(ProjectDir)\*.png" />
+      <ImageFiles Include="$(ProjectDir)\*.jpg" />
+			<ImageFiles Include="$(ProjectDir)\*.dds" />
+    </ItemGroup>  
+
+    <Copy SourceFiles="@(AnimFiles)" DestinationFiles="@(AnimFiles->'$(InstallFolder)\anim\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(DLCFiles)" DestinationFiles="@(DLCFiles->'$(InstallFolder)\dlc\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(WorldGenTemplates)" DestinationFiles="@(WorldGenTemplates->'$(InstallFolder)\templates\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(WorldGenFiles)" DestinationFiles="@(WorldGenFiles->'$(InstallFolder)\worldgen\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(ImageFiles)" DestinationFolder="$(InstallFolder)" />
+    <Copy SourceFiles="$(ModInfoFile)" DestinationFolder="$(InstallFolder)" />
+    <Copy SourceFiles="$(ModDescriptionFile)" DestinationFolder="$(InstallFolder)" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFiles="$(InstallFolder)\$(TargetFileName)" />
+  </Target>
+</Project>
