@@ -5,7 +5,7 @@ using KMod;
 
 #endregion
 
-namespace NeonEden
+namespace EnemyArea.NeonEden
 {
     public class NeonEdenMod : UserMod2
     {

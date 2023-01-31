@@ -5,4 +5,10 @@
     <Description></Description>
     <LastWorkingBuild>472345</LastWorkingBuild>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Asteroid_NeonEden.dds" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Asteroid_NeonEden.dds" />
+  </ItemGroup>
 </Project>

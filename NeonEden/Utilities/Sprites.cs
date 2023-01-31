@@ -2,7 +2,7 @@
 using UnityEngine;
 
 
-namespace NeonEden.Utilities
+namespace EnemyArea.NeonEden.Utilities
 {
     // Token: 0x02000002 RID: 2
     internal class Sprites

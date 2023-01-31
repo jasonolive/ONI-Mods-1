@@ -52,7 +52,6 @@ staticID: EnemyArea.$(AssemblyName)
       <WorldGenFiles Include="$(ProjectDir)\worldgen\**\*.*" />
       <ImageFiles Include="$(ProjectDir)\*.png" />
       <ImageFiles Include="$(ProjectDir)\*.jpg" />
-			<ImageFiles Include="$(ProjectDir)\*.dds" />
     </ItemGroup>  
 
     <Copy SourceFiles="@(AnimFiles)" DestinationFiles="@(AnimFiles->'$(InstallFolder)\anim\%(RecursiveDir)%(Filename)%(Extension)')" />
